@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  #  app:
+  #    build:
+  #      context: ./secondary
+  #      dockerfile: Dockerfile
+  #    command: [ "python", "-m", "app", "--host=0.0.0.0", "--port=9000", "--delay=10" ]
+  #    ports:
+  #      - "9003:9000"
+
+  mongodb:
+    image: mongo:4.0.8
+    container_name: mongodb
+    restart: unless-stopped
+    command: --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: qwerty
+      MONGO_INITDB_DATABASE: allright__audio
+      MONGO_USER: allright
+      MONGO_PASSWORD: qwerty
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    volumes:
+      - mongodbdata:/data/db
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    ports:
+      - "27020:27017"
+
+#            networks:
+#      - backend
+
+volumes:
+  mongodbdata:
+    driver: local
